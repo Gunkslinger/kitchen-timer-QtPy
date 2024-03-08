@@ -82,17 +82,17 @@ class Ui_MainWindow(object):
         self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.labelOutput = QLabel(self.verticalLayoutWidget)
-        self.labelOutput.setObjectName(u"labelOutput")
+        self.labelCountDown = QLabel(self.verticalLayoutWidget)
+        self.labelCountDown.setObjectName(u"labelOutput")
         font2 = QFont()
         font2.setPointSize(35)
         font2.setBold(True)
-        self.labelOutput.setFont(font2)
-        self.labelOutput.setAutoFillBackground(False)
-        self.labelOutput.setTextFormat(Qt.AutoText)
-        self.labelOutput.setAlignment(Qt.AlignCenter)
+        self.labelCountDown.setFont(font2)
+        self.labelCountDown.setAutoFillBackground(False)
+        self.labelCountDown.setTextFormat(Qt.AutoText)
+        self.labelCountDown.setAlignment(Qt.AlignCenter)
 
-        self.verticalLayout.addWidget(self.labelOutput)
+        self.verticalLayout.addWidget(self.labelCountDown)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -107,6 +107,6 @@ class Ui_MainWindow(object):
         self.spinBoxMinutes.setSuffix(QCoreApplication.translate("MainWindow", u"  minutes", None))
         self.spinBoxSeconds.setSuffix(QCoreApplication.translate("MainWindow", u"  seconds", None))
         self.toolButtonStartStop.setText(QCoreApplication.translate("MainWindow", u"START", None))
-        self.labelOutput.setText(QCoreApplication.translate("MainWindow", u"00:00:00", None))
+        self.labelCountDown.setText(QCoreApplication.translate("MainWindow", u"00:00:00", None))
     # retranslateUi
 

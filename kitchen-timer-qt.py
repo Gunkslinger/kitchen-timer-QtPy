@@ -19,7 +19,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.h = 0
         self.m = 0
         self.s = 0
-        self.textOut = " "
+        self.CountDownText = " "
         #self.spinBoxHours.valueChanged.connect(self.spinH)
         #self.spinBoxMinutes.valueChanged.connect(self.spinM)
         #self.spinBoxSeconds.valueChanged.connect(self.spinS)
@@ -34,6 +34,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.h = self.spinBoxHours.value()
             self.m = self.spinBoxMinutes.value()
             self.s = self.spinBoxSeconds.value()
+            self.CountDownText = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
+            self.labelCountDown.setText(self.CountDownText)
+            print(self.labelCountDown.text())
             self.count_down_timer.start(1000)
         else:
             self.h = self.m = self.s = 0
@@ -41,35 +44,35 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
 
 
     def update_timer(self):
-        self.textOut = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
-        self.labelOutput.setText(self.textOut)
+        self.CountDownText = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
+        self.labelCountDown.setText(self.CountDownText)
         if self.s > 0:
             self.s -= 1
-            self.textOut = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
-            self.labelOutput.setText(self.textOut)
+            self.CountDownText = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
+            self.labelCountDown.setText(self.CountDownText)
 
         elif self.m > 0:
             self.m -= 1
             self.s = 59
-            self.textOut = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
-            self.labelOutput.setText(self.textOut)
+            self.CountDownText = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
+            self.labelCountDown.setText(self.CountDownText)
 
         elif self.h > 0:
             self.h -= 1
             self.m = 59
             self.s = 59
-            self.textOut = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
-            self.labelOutput.setText(self.textOut)
+            self.CountDownText = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
+            self.labelCountDown.setText(self.CountDownText)
 
         if self.h + self.m + self.s == 0:  # It's the fiiinal countdownnnn!!
             self.toolButtonStartStop.setChecked(False)
-            self.textOut = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
-            self.labelOutput.setText(self.textOut)
+            self.CountDownText = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
+            self.labelCountDown.setText(self.CountDownText)
             self.start_stop()
             # ALERT GOES HERE
             subprocess.run(CMD, shell=False)
 
-        print(self.labelOutput.text())
+        print(self.labelCountDown.text())
 
 
 def main():

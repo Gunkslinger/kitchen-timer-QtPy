@@ -14,13 +14,22 @@ class MainWindow(QMainWindow, Ui_MainWindow): #Ui_MainWindow):
         self.setupUi(self)
         self.show()
         self.spinBoxHours.valueChanged.connect(self.spinH)
-        #self.myPushButton.pressed.connect(lambda: self.pressedit(0))
+        self.spinBoxMinutes.valueChanged.connect(self.spinM)
+        self.spinBoxSeconds.valueChanged.connect(self.spinS)
+        self.toolButtonStartStop.setCheckable(True)
+        self.toolButtonStartStop.clicked.connect(lambda: self.pressedit(0))
 
     def spinH(self):
-        print("CLICKED! {}", self.spinBoxHours.value())
+        print("Hours spun! ", self.spinBoxHours.value())
+
+    def spinM(self):
+        print("Minutes spun! ", self.spinBoxMinutes.value())
+
+    def spinS(self):
+        print("Seconds spun! ", self.spinBoxSeconds.value())
 
     def pressedit(self, n):
-        print(f"PRESSED: {n}")
+        print("Start/Stop PRESSED: ", self.toolButtonStartStop.isChecked())
 
 #w = QtWidgets.QMainWindow()
 # # Create a label and display it all together

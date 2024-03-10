@@ -106,7 +106,7 @@ class Ui_MainWindow(object):
         self.spinBoxHours.setSuffix(QCoreApplication.translate("MainWindow", u"  hours", None))
         self.spinBoxMinutes.setSuffix(QCoreApplication.translate("MainWindow", u"  minutes", None))
         self.spinBoxSeconds.setSuffix(QCoreApplication.translate("MainWindow", u"  seconds", None))
-        self.toolButtonStartStop.setText(QCoreApplication.translate("MainWindow", u"START", None))
+        self.toolButtonStartStop.setText(QCoreApplication.translate("MainWindow", u"START".center(7), None))
         self.labelCountDown.setText(QCoreApplication.translate("MainWindow", u"00:00:00", None))
     # retranslateUi
 

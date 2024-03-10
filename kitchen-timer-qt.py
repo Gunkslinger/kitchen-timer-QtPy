@@ -1,3 +1,4 @@
+#! /bin/python
 '''
 Yet another Kitchen Timer prog, this time using PySide2,
 the python/Qt bindings module and Designer-qt5
@@ -15,11 +16,10 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        #self.show()
         self.h = 0
         self.m = 0
         self.s = 0
-        self.CountDownText = " "
+        self.CountDownText: str
         self.toolButtonStartStop.setCheckable(True)
         self.toolButtonStartStop.clicked.connect(self.start_stop)
         self.count_down_timer = QTimer(self)
@@ -29,7 +29,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
     def update_countdown_label(self):
         self.CountDownText = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
         self.labelCountDown.setText(self.CountDownText)
-    
+        self.labelCountDown.repaint()
 
     def start_stop(self):
         b = self.toolButtonStartStop.isChecked()
@@ -38,15 +38,16 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.m = self.spinBoxMinutes.value()
             self.s = self.spinBoxSeconds.value()
             self.update_countdown_label()
+            self.toolButtonStartStop.setText("STOP".center(6))
             self.count_down_timer.start(1000)
         else:
             self.h = self.m = self.s = 0
             self.update_countdown_label()
+            self.toolButtonStartStop.setText("START".center(7))
             self.count_down_timer.stop()
 
 
     def update_timer(self):
-        self.update_countdown_label()
         if self.s > 0:
             self.s -= 1
             self.update_countdown_label()
@@ -64,7 +65,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
 
         if self.h + self.m + self.s == 0:  # It's the fiiinal countdownnnn!!
             self.toolButtonStartStop.setChecked(False)
-            self.update_countdown_label()
             self.start_stop()
             # ALERT GOES HERE
             subprocess.run(CMD, shell=False)

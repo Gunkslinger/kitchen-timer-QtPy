@@ -1,0 +1,7 @@
+{
+
+	"player": "/usr/bin/aplay",
+	"opts": "-q",
+	"file": "/home/fcf/.local/share/QtTimer/chime.wav"
+
+}

@@ -17,8 +17,10 @@ from PySide2.QtWidgets import QApplication, QMainWindow
 from QtPyTimer import Ui_MainWindow, QTimer
 import subprocess
 
-chime = config_from_json(os.getenv("HOME") + "/.QtTimer", read_from_file=True)
-CMD = [chime.player, chime.opts, chime.file]
+HOME = os.getenv("HOME")
+chime = config_from_json(HOME + "/.QtTimer", read_from_file=True)
+CMD = [chime.player, chime.opts, HOME + chime.file]
+
 
 class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
     

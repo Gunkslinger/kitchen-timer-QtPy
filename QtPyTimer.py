@@ -2,7 +2,7 @@
 
 ################################################################################
 ## Form generated from reading UI file 'QtPyTimer.ui'
-##
+## 
 ## Created by: Qt User Interface Compiler version 5.15.12
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!

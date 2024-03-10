@@ -2,14 +2,23 @@
 '''
 Yet another Kitchen Timer prog, this time using PySide2,
 the python/Qt bindings module and Designer-qt5
+
+NEW: Configuration file .QtTimer must go in $HOME
+
+    player: audio player binary
+    opts: options for player if needed
+    file: audio files used for the chime sound
 '''
 # Import PySide2 classes
+from config import config_from_json
 import sys
+import os
 from PySide2.QtWidgets import QApplication, QMainWindow
 from QtPyTimer import Ui_MainWindow, QTimer
 import subprocess
 
-CMD = ["/usr/bin/aplay", "-q", "chime.wav"]
+chime = config_from_json(os.getenv("HOME") + "/.QtTimer", read_from_file=True)
+CMD = [chime.player, chime.opts, chime.file]
 
 class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
     
@@ -67,7 +76,16 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.toolButtonStartStop.setChecked(False)
             self.start_stop()
             # ALERT GOES HERE
-            subprocess.run(CMD, shell=False)
+            c = subprocess.run(CMD, shell=False)
+            if c.returncode != 0:
+                script = self.get_script_name()
+                print(f"{script}: Error {c.returncode} in {c.args[0]} subproc ")
+
+    def get_script_name(self):
+        if hasattr(sys.modules[__name__], '__file__'):
+            return os.path.splitext(os.path.basename(__file__))[0]
+        return os.path.basename(sys.argv[0])
+
 
 # class MainWindow
 

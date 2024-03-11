@@ -6,8 +6,9 @@ the python/Qt bindings module and Designer-qt5
 
 import sys
 import os
+from pathlib import Path
 from PySide2.QtCore import QTimer
-from PySide2.QtWidgets import QApplication, QMainWindow
+from PySide2.QtWidgets import QApplication, QMainWindow, QStyle
 from QtPyTimer import Ui_MainWindow
 import subprocess
 from chime import play_chime
@@ -43,11 +44,17 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.s = self.spinBoxSeconds.value()
             self.update_countdown_label()
             self.toolButtonStartStop.setText("STOP".center(6))
+            self.toolButtonStartStop.setStyleSheet(
+                "background-color: rgb(226, 45, 45)"
+                )
             self.count_down_timer.start(1000)
         else:
             self.h = self.m = self.s = 0
             self.update_countdown_label()
             self.toolButtonStartStop.setText("START".center(7))
+            self.toolButtonStartStop.setStyleSheet(
+                "background-color: "
+                ) # blank resets to default color
             self.setWindowTitle("QtPyTimer")
             self.count_down_timer.stop()
 
@@ -80,7 +87,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
 def main():
     app = QApplication(sys.argv)
     app.setApplicationName("QtPyTimer")
-
+    app.setStyleSheet(Path('mystyle.qss').read_text())
+    
     window = MainWindow()
     window.show()
 

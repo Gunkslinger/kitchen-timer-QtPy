@@ -1,0 +1,4 @@
+QWidget {color: rgb(215, 214, 199);
+                    background-color: rgb(52, 52, 52);
+}
+    

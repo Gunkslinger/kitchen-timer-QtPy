@@ -10,16 +10,16 @@ NEW: Configuration file .QtTimer must go in $HOME
     file: audio files used for the chime sound
 '''
 # Import PySide2 classes
-from config import config_from_json
 import sys
 import os
 from PySide2.QtWidgets import QApplication, QMainWindow
 from QtPyTimer import Ui_MainWindow, QTimer
 import subprocess
+from chime import play_chime
 
-HOME = os.getenv("HOME")
-chime = config_from_json(HOME + "/.QtTimer", read_from_file=True)
-CMD = [chime.player, chime.opts, HOME + chime.file]
+#HOME = os.getenv("HOME")
+#chime = config_from_json(HOME + "/.QtTimer", read_from_file=True)
+#CMD = [chime.player, chime.opts, HOME + chime.file]
 
 
 class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
@@ -78,10 +78,12 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.toolButtonStartStop.setChecked(False)
             self.start_stop()
             # ALERT GOES HERE
-            c = subprocess.run(CMD, shell=False)
-            if c.returncode != 0:
-                script = self.get_script_name()
-                print(f"{script}: Error {c.returncode} in {c.args[0]} subproc ")
+            play_chime()
+
+            #c = subprocess.run(CMD, shell=False)
+            #if c.returncode != 0:
+            #    script = self.get_script_name()
+            #    print(f"{script}: Error {c.returncode} in {c.args[0]} subproc ")
 
     def get_script_name(self):
         if hasattr(sys.modules[__name__], '__file__'):

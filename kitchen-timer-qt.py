@@ -71,18 +71,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             # ALERT GOES HERE
             play_chime()
 
-            #c = subprocess.run(CMD, shell=False)
-            #if c.returncode != 0:
-            #    script = self.get_script_name()
-            #    print(f"{script}: Error {c.returncode} in {c.args[0]} subproc ")
-
-    def get_script_name(self):
-        if hasattr(sys.modules[__name__], '__file__'):
-            return os.path.splitext(os.path.basename(__file__))[0]
-        return os.path.basename(sys.argv[0])
-
-
 # class MainWindow
+
 
 def main():
     app = QApplication(sys.argv)

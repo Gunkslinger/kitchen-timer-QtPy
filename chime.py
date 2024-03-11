@@ -5,13 +5,12 @@ directory and plays it.
 """
 
 import wave
-import sys
-import os
+from os import getenv
 from config import config_from_json
 
 import pyaudio
 
-HOME = os.getenv("HOME")
+HOME = getenv("HOME")
 chime = config_from_json(HOME + "/.QtTimer", read_from_file=True)
 CHUNK = 1024
 

@@ -31,7 +31,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
     def update_countdown_label(self):
         self.CountDownText = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
         self.labelCountDown.setText(self.CountDownText)
+        self.setWindowTitle(self.CountDownText)
         self.labelCountDown.repaint()
+
 
     def start_stop(self):
         b = self.toolButtonStartStop.isChecked()
@@ -46,6 +48,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.h = self.m = self.s = 0
             self.update_countdown_label()
             self.toolButtonStartStop.setText("START".center(7))
+            self.setWindowTitle("QtPyTimer")
             self.count_down_timer.stop()
 
 

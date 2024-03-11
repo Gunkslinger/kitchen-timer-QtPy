@@ -6,8 +6,9 @@ the python/Qt bindings module and Designer-qt5
 
 import sys
 import os
+from PySide2.QtCore import QTimer
 from PySide2.QtWidgets import QApplication, QMainWindow
-from QtPyTimer import Ui_MainWindow, QTimer
+from QtPyTimer import Ui_MainWindow
 import subprocess
 from chime import play_chime
 

@@ -8,9 +8,10 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *  # type: ignore
-from PySide2.QtGui import *  # type: ignore
-from PySide2.QtWidgets import *  # type: ignore
+from PySide2.QtCore import QMetaObject, QRect, Qt, QCoreApplication
+from PySide2.QtGui import QFont, QCursor
+from PySide2.QtWidgets import (QWidget, QLayout, QHBoxLayout, QVBoxLayout, QSpinBox,
+                                QAbstractSpinBox, QToolButton, QSizePolicy, QLabel)
 
 
 class Ui_MainWindow(object):

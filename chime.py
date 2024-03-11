@@ -1,4 +1,8 @@
-"""PyAudio Example: Play a wave file."""
+"""From: PyAudio Example: Play a wave file.
+Gets audio file.wav to be played from user 
+config file .QtTimer (JSON) in their home
+directory and plays it.
+"""
 
 import wave
 import sys

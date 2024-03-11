@@ -1,7 +1,1 @@
-{
-
-	"player": "/usr/bin/aplay",
-	"opts": "-q",
-	"file": "/.local/share/QtTimer/chime.wav"
-
-}
+{"file": "/chime.wav"}

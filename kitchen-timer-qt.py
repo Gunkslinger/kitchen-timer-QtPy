@@ -17,6 +17,7 @@ from chime import play_chime
 class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
 
     CountDownText: str
+    appname: str
 
     def __init__(self):
         super().__init__()
@@ -32,6 +33,10 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.spinBoxMinutes.clearFocus()
         self.spinBoxSeconds.clearFocus()
 
+
+    def set_app_name(self, name: str):
+        self.appname = name
+        self.setWindowTitle(self.appname)
 
     def update_countdown_label(self):
         self.CountDownText = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
@@ -59,7 +64,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.toolButtonStartStop.setStyleSheet(
                 "background-color: "
                 ) # blank resets to default color
-            self.setWindowTitle("QtPyTimer")
+            self.setWindowTitle(self.appname)
             self.count_down_timer.stop()
 
 
@@ -94,6 +99,7 @@ def main():
     app.setStyleSheet(Path('QtPyTimer.qss').read_text())
 
     window = MainWindow()
+    window.set_app_name(app.applicationName())
     window.show()
 
     app.exec_()

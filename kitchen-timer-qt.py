@@ -15,18 +15,22 @@ from chime import play_chime
 
 
 class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
-    
+
+    CountDownText: str
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.h = 0
-        self.m = 0
-        self.s = 0
-        self.CountDownText: str
+        h = 0
+        m = 0
+        s = 0
         self.toolButtonStartStop.setCheckable(True)
         self.toolButtonStartStop.clicked.connect(self.start_stop)
         self.count_down_timer = QTimer(self)
         self.count_down_timer.timeout.connect(self.update_timer)
+        self.spinBoxHours.clearFocus()
+        self.spinBoxMinutes.clearFocus()
+        self.spinBoxSeconds.clearFocus()
 
 
     def update_countdown_label(self):
@@ -87,8 +91,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
 def main():
     app = QApplication(sys.argv)
     app.setApplicationName("QtPyTimer")
-    app.setStyleSheet(Path('mystyle.qss').read_text())
-    
+    app.setStyleSheet(Path('QtPyTimer.qss').read_text())
+
     window = MainWindow()
     window.show()
 

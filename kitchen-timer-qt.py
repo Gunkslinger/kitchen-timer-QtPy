@@ -54,14 +54,14 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.update_countdown_label()
             self.toolButtonStartStop.setText("STOP".center(6))
             self.toolButtonStartStop.setStyleSheet(
-                "background-color: rgb(226, 45, 45)"
+                "background-color: rgb(120, 45, 45)" # red stop button
                 )
             self.count_down_timer.start(1000)
         else:
             self.h = self.m = self.s = 0
             self.update_countdown_label()
             self.toolButtonStartStop.setText("START".center(7))
-            self.toolButtonStartStop.setStyleSheet(
+            self.toolButtonStartStop.setStyleSheet(     # plain start button
                 "background-color: "
                 ) # blank resets to default color
             self.setWindowTitle(self.appname)

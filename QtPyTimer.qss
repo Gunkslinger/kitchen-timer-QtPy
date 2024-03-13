@@ -1,14 +1,21 @@
 QWidget {
     color: rgb(220, 220, 200);
     background-color: rgb(55, 55, 55);
+    border-color: rgb(80, 80, 80);
 }
 
 QToolButton {
+    color: rgb(220, 220, 200);
     border-radius: 8px;
-    border: 1px solid  rgb(80, 80, 80);
+    border: 5px solid rgb(80, 80, 80);
+}
+
+QToolButton:hover {
+    background-color: rgb(45, 120, 45);
 }
 
 QSpinBox:focus {
+    color: rgb(220, 220, 200);
     border-radius: 8px;
     border: 1px solid  rgb(80, 80, 80);
   }

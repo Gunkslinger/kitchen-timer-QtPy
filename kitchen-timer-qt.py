@@ -1,8 +1,8 @@
 #! /bin/python
-'''
+"""
 Yet another Kitchen Timer prog, this time using PySide2,
 the python/Qt bindings module and Designer-qt5
-'''
+"""
 
 import sys
 import os
@@ -12,7 +12,7 @@ from PySide2.QtWidgets import QApplication, QMainWindow, QStyle
 from QtPyTimer import Ui_MainWindow
 import subprocess
 from chime import play_chime
-
+from kitchen_timer_config import KitchenTimerConfig
 
 class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
 
@@ -33,7 +33,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.spinBoxMinutes.clearFocus()
         self.spinBoxSeconds.clearFocus()
 
-
     def set_app_name(self, name: str):
         self.appname = name
         self.setWindowTitle(self.appname)
@@ -44,7 +43,6 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.setWindowTitle(self.CountDownText)
         self.labelCountDown.repaint()
 
-
     def start_stop(self):
         b = self.toolButtonStartStop.isChecked()
         if b is True:
@@ -54,19 +52,18 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.update_countdown_label()
             self.toolButtonStartStop.setText("STOP".center(6))
             self.toolButtonStartStop.setStyleSheet(
-                "background-color: rgb(120, 45, 45)" # red stop button
-                )
+                "background-color: rgb(120, 45, 45)"  # red stop button
+            )
             self.count_down_timer.start(1000)
         else:
             self.h = self.m = self.s = 0
             self.update_countdown_label()
             self.toolButtonStartStop.setText("START".center(7))
-            self.toolButtonStartStop.setStyleSheet(     # plain start button
+            self.toolButtonStartStop.setStyleSheet(  # plain start button
                 "background-color: "
-                ) # blank resets to default color
+            )  # blank resets to default color
             self.setWindowTitle(self.appname)
             self.count_down_timer.stop()
-
 
     def update_timer(self):
         if self.s > 0:
@@ -90,19 +87,24 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             # ALERT GOES HERE
             play_chime()
 
+
 # class MainWindow
 
 
 def main():
     app = QApplication(sys.argv)
     app.setApplicationName("QtPyTimer")
-    app.setStyleSheet(Path('QtPyTimer.qss').read_text())
-
+    kconf = KitchenTimerConfig()
+    kqss = kconf.get_timer_qss()
+    app.setStyleSheet(
+        Path(kqss).read_text()
+    )
     window = MainWindow()
     window.set_app_name(app.applicationName())
     window.show()
 
     app.exec_()
+
 
 if __name__ == "__main__":
     main()

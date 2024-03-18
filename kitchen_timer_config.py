@@ -1,26 +1,25 @@
+''' custom style confuguration code
+'''
 from pathlib import Path
 from config import config_from_json
 
-
 class KitchenTimerConfig():
+    '''Kitchen timer config class
+    '''
 
     def __init__(self):
         self.p = Path.home()
-        self.HOME = f"{self.p}"
-        self.conf = config_from_json(self.HOME + "/.QtTimer", read_from_file=True)
+        self.home = f"{self.p}"
+        self.conf = config_from_json(self.home + "/.QtTimer", read_from_file=True)
 
     def get_chime_wav(self) -> str:
-
-        self.chimeWav = self.HOME + self.conf.file
-        #print(self.chimeWav)
-        return(self.chimeWav)
+        '''get alert wav file from the conf file
+        '''
+        chimewav = self.home + self.conf.file
+        return chimewav
 
     def get_timer_qss(self) -> str:
-        
-        self.qss = self.HOME + self.conf.qss
-        #print(self.qss)
-        return(self.qss)
-
-# k = KitchenTimerConfig()
-# k.get_chime_wav()
-# k.get_timer_qss()
+        ''' get the style sheet from the conf file
+        '''
+        qss = self.home + self.conf.qss
+        return qss

@@ -1,30 +1,26 @@
-#! /bin/python
 """
 Yet another Kitchen Timer prog, this time using PySide2,
 the python/Qt bindings module and Designer-qt5
 """
 
 import sys
-import os
 from pathlib import Path
 from PySide2.QtCore import QTimer
 from PySide2.QtWidgets import QApplication, QMainWindow, QStyle
 from QtPyTimer import Ui_MainWindow
-import subprocess
 from chime import play_chime
 from kitchen_timer_config import KitchenTimerConfig
 
-class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
 
-    CountDownText: str
-    appname: str
+class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
+    ''' MainWindow class '''
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        h = 0
-        m = 0
-        s = 0
+        self.h = 0
+        self.m = 0
+        self.s = 0
         self.toolButtonStartStop.setCheckable(True)
         self.toolButtonStartStop.clicked.connect(self.start_stop)
         self.count_down_timer = QTimer(self)
@@ -32,18 +28,23 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.spinBoxHours.clearFocus()
         self.spinBoxMinutes.clearFocus()
         self.spinBoxSeconds.clearFocus()
+        self.count_down_text: str
+        self.appname: str
 
     def set_app_name(self, name: str):
+        '''set app name'''
         self.appname = name
         self.setWindowTitle(self.appname)
 
     def update_countdown_label(self):
-        self.CountDownText = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
-        self.labelCountDown.setText(self.CountDownText)
-        self.setWindowTitle(self.CountDownText)
+        ''' update countdown label '''
+        self.count_down_text = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
+        self.labelCountDown.setText(self.count_down_text)
+        self.setWindowTitle(self.count_down_text)
         self.labelCountDown.repaint()
 
     def start_stop(self):
+        ''' toggle start/stop button slot '''
         b = self.toolButtonStartStop.isChecked()
         if b is True:
             self.h = self.spinBoxHours.value()
@@ -66,6 +67,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.count_down_timer.stop()
 
     def update_timer(self):
+        ''' update timer slot '''
         if self.s > 0:
             self.s -= 1
             self.update_countdown_label()
@@ -92,13 +94,12 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
 
 
 def main():
+    ''' entry '''
     app = QApplication(sys.argv)
     app.setApplicationName("QtPyTimer")
     kconf = KitchenTimerConfig()
     kqss = kconf.get_timer_qss()
-    app.setStyleSheet(
-        Path(kqss).read_text()
-    )
+    app.setStyleSheet(Path(kqss).read_text())
     window = MainWindow()
     window.set_app_name(app.applicationName())
     window.show()

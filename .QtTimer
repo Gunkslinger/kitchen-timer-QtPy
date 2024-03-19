@@ -1,1 +1,4 @@
-{"file": "/chime.wav"}
+{
+    "file": "/chime.wav"
+    "qss": "/QtPyTimer.qss"
+}

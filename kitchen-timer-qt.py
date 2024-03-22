@@ -72,18 +72,17 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         ''' update timer slot '''
         if self.s > 0:
             self.s -= 1
-            self.update_countdown_label()
 
         elif self.m > 0:
             self.m -= 1
             self.s = 59
-            self.update_countdown_label()
 
         elif self.h > 0:
             self.h -= 1
             self.m = 59
             self.s = 59
-            self.update_countdown_label()
+            
+        self.update_countdown_label()
 
         if self.h + self.m + self.s == 0:  # It's the fiiinal countdownnnn!!
             self.toolButtonStartStop.setChecked(False)

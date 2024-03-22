@@ -9,8 +9,8 @@ class KitchenTimerConfig():
 
     def __init__(self):
         self.p = Path.home()
-        self.home = f"{self.p}"
-        self.conf = config_from_json(self.home + "/.QtTimer", read_from_file=True)
+        self.home = f"{self.p}/"
+        self.conf = config_from_json(self.home + ".QtTimer", read_from_file=True)
 
     def get_chime_wav(self) -> str:
         '''get alert wav file from the conf file

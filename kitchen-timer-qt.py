@@ -37,7 +37,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.appname: str
         self.now = dt.today()
         self.labelDate.setText("Finish time: " +
-        f"{self.now.date()} {self.now.hour}:{self.now.minute}:{self.now.second}")
+        f"{self.now.date()} {str(self.now.hour).zfill(2)}:{str(self.now.minute).zfill(2)}:{str(self.now.second).zfill(2)}")
 
     def set_app_name(self, name: str):
         '''set app name'''

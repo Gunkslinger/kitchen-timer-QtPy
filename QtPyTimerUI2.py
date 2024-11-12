@@ -28,7 +28,7 @@ class FinishDialog(QDialog):
         finlab = QLabel()
         self.now = dt.today()
         finlab.setText("Timer Finished at: " +
-        f"{self.now.date()} {self.now.hour}:{self.now.minute}:{self.now.second}")
+        f"{self.now.date()} {str(self.now.hour).zfill(2)}:{str(self.now.minute).zfill(2)}:{str(self.now.second).zfill(2)}")
         ok_button = QDialogButtonBox(QDialogButtonBox.Ok)
         ok_button.accepted.connect(self.accept)
 

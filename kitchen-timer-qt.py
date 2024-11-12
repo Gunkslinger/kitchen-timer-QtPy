@@ -6,12 +6,14 @@ the python/Qt bindings module and Designer-qt5
 """
 
 import sys
+from datetime import datetime as dt
 from pathlib import Path
-from PySide2.QtCore import QTimer
-from PySide2.QtWidgets import QApplication, QMainWindow, QStyle
-from QtPyTimer import Ui_MainWindow
+from PySide6.QtCore import QTimer
+from PySide6.QtWidgets import QApplication, QMainWindow, QStyle
+from QtPyTimerUI2 import Ui_MainWindow, FinishDialog
 from chime import play_chime
 from kitchen_timer_config import KitchenTimerConfig
+
 
 
 class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
@@ -30,8 +32,12 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.spinBoxHours.clearFocus()
         self.spinBoxMinutes.clearFocus()
         self.spinBoxSeconds.clearFocus()
+        self.progressBar.reset()
         self.count_down_text: str
         self.appname: str
+        self.now = dt.today()
+        self.labelDate.setText("Finish time: " +
+        f"{self.now.date()} {self.now.hour}:{self.now.minute}:{self.now.second}")
 
     def set_app_name(self, name: str):
         '''set app name'''
@@ -89,6 +95,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.start_stop()
             # ALERT GOES HERE
             play_chime()
+            d = FinishDialog()
+            d.exec()
 
 
 # class MainWindow
@@ -105,7 +113,7 @@ def main():
     window.set_app_name(app.applicationName())
     window.show()
 
-    app.exec_()
+    app.exec()
 
 
 if __name__ == "__main__":

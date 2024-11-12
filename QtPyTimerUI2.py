@@ -1,24 +1,50 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'QtPyTimer.ui'
-## 
+## Form generated from reading UI file 'QtPyTimer2.ui'
+##
 ## Created by: Qt User Interface Compiler version 5.15.12
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import QMetaObject, QRect, Qt, QCoreApplication
-from PySide2.QtGui import QFont, QCursor
-from PySide2.QtWidgets import (QWidget, QLayout, QHBoxLayout, QVBoxLayout, QSpinBox,
-                                QAbstractSpinBox, QToolButton, QSizePolicy, QLabel, QProgressBar)
+# Converted to PySide6 and other tweaks done by hand
+# THIS FILE WILL NOT BE REGENERATED AS IS by it's UI file. DO NOT OVERWRITE! Necessary tweaks will be lost
 
+from PySide6.QtCore import QMetaObject, QRect, Qt, QCoreApplication
+from PySide6.QtGui import QFont, QCursor
+from PySide6.QtWidgets import (QWidget, QLayout, QHBoxLayout, QVBoxLayout, QSpinBox,
+                                QAbstractSpinBox, QToolButton, QSizePolicy, QLabel, QProgressBar,
+                                QVBoxLayout, QDialog, QDialogButtonBox, QLabel)
+from datetime import datetime as dt
+
+class FinishDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+
+        self.resize(240, 120)
+        self.setWindowTitle("Timer Finished")
+        self.setLayout(QVBoxLayout())
+        finlab = QLabel()
+        self.now = dt.today()
+        finlab.setText("Timer Finished at: " +
+        f"{self.now.date()} {self.now.hour}:{self.now.minute}:{self.now.second}")
+        ok_button = QDialogButtonBox(QDialogButtonBox.Ok)
+        ok_button.accepted.connect(self.accept)
+
+        self.layout().addWidget(finlab)
+        self.layout().addWidget(ok_button)
+
+    def accept(self):
+        #print("OK button clicked")
+        self.close()
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(540, 300)
+        #MainWindow.resize(540, 408)
+        MainWindow.setFixedSize(540, 350)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.horizontalLayoutWidget = QWidget(self.centralwidget)
@@ -31,6 +57,7 @@ class Ui_MainWindow(object):
         self.spinBoxHours.setObjectName(u"spinBoxHours")
         font = QFont()
         font.setBold(True)
+        #font.setWeight(75)
         self.spinBoxHours.setFont(font)
         self.spinBoxHours.setAlignment(Qt.AlignCenter)
 
@@ -55,7 +82,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayoutWidget_2 = QWidget(self.centralwidget)
         self.horizontalLayoutWidget_2.setObjectName(u"horizontalLayoutWidget_2")
-        self.horizontalLayoutWidget_2.setGeometry(QRect(120, 70, 311, 76))
+        self.horizontalLayoutWidget_2.setGeometry(QRect(175, 70, 311, 78))
         self.horizontalLayout_2 = QHBoxLayout(self.horizontalLayoutWidget_2)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setSizeConstraint(QLayout.SetFixedSize)
@@ -71,6 +98,7 @@ class Ui_MainWindow(object):
         font1.setFamily(u"Crillee")
         font1.setPointSize(35)
         font1.setBold(False)
+        #font1.setWeight(50)
         self.toolButtonStartStop.setFont(font1)
         self.toolButtonStartStop.setCursor(QCursor(Qt.PointingHandCursor))
         self.toolButtonStartStop.setToolButtonStyle(Qt.ToolButtonTextOnly)
@@ -88,6 +116,7 @@ class Ui_MainWindow(object):
         font2 = QFont()
         font2.setPointSize(35)
         font2.setBold(True)
+        #font2.setWeight(75)
         self.labelCountDown.setFont(font2)
         self.labelCountDown.setAutoFillBackground(False)
         self.labelCountDown.setTextFormat(Qt.AutoText)
@@ -137,7 +166,8 @@ class Ui_MainWindow(object):
         self.spinBoxHours.setSuffix(QCoreApplication.translate("MainWindow", u"  hours", None))
         self.spinBoxMinutes.setSuffix(QCoreApplication.translate("MainWindow", u"  minutes", None))
         self.spinBoxSeconds.setSuffix(QCoreApplication.translate("MainWindow", u"  seconds", None))
-        self.toolButtonStartStop.setText(QCoreApplication.translate("MainWindow", u"START".center(7), None))
+        self.toolButtonStartStop.setText(QCoreApplication.translate("MainWindow", u"START", None))
         self.labelCountDown.setText(QCoreApplication.translate("MainWindow", u"00:00:00", None))
+        self.labelDate.setText(QCoreApplication.translate("MainWindow", u"Today's Date + timer", None))
     # retranslateUi
 

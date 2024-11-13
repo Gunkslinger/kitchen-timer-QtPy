@@ -13,7 +13,7 @@
 
 from PySide6.QtCore import QMetaObject, QRect, Qt, QCoreApplication
 from PySide6.QtGui import QFont, QCursor
-from PySide6.QtWidgets import (QWidget, QLayout, QHBoxLayout, QVBoxLayout, QSpinBox,
+from PySide6.QtWidgets import (QWidget, QLayout, QHBoxLayout, QVBoxLayout, QSpinBox, QToolBar,
                                 QAbstractSpinBox, QToolButton, QSizePolicy, QLabel, QProgressBar,
                                 QVBoxLayout, QDialog, QDialogButtonBox, QLabel)
 from datetime import datetime as dt
@@ -27,8 +27,7 @@ class FinishDialog(QDialog):
         self.setLayout(QVBoxLayout())
         finlab = QLabel()
         self.now = dt.today()
-        finlab.setText("Timer Finished at: " +
-        f"{self.now.date()} {str(self.now.hour).zfill(2)}:{str(self.now.minute).zfill(2)}:{str(self.now.second).zfill(2)}")
+        finlab.setText("Timer Finished at: " + self.now.strftime("%b %d, %Y %I:%M:%S %p"))
         ok_button = QDialogButtonBox(QDialogButtonBox.Ok)
         ok_button.accepted.connect(self.accept)
 
@@ -36,7 +35,6 @@ class FinishDialog(QDialog):
         self.layout().addWidget(ok_button)
 
     def accept(self):
-        #print("OK button clicked")
         self.close()
 
 class Ui_MainWindow(object):
@@ -44,20 +42,28 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         #MainWindow.resize(540, 408)
-        MainWindow.setFixedSize(540, 350)
+        MainWindow.setFixedSize(540, 400)
+
+        self.toolbar = QToolBar(u"Tool Bar", MainWindow)
+        self.toolbar.setMovable(False)
+        self.toolbar.setObjectName(u"toolBar")
+        self.presetsToolButton = QToolButton(self.toolbar)
+        self.toolbar.addWidget(self.presetsToolButton)
+        self.presetsToolButton.setText(u"Presets")
+        MainWindow.addToolBar(self.toolbar)
+
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.horizontalLayoutWidget = QWidget(self.centralwidget)
         self.horizontalLayoutWidget.setObjectName(u"horizontalLayoutWidget")
-        self.horizontalLayoutWidget.setGeometry(QRect(0, 0, 541, 61))
+        self.horizontalLayoutWidget.setGeometry(QRect(0, 20, 541, 61))
         self.horizontalLayout = QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(10, 0, 10, 0)
-        self.spinBoxHours = QSpinBox(self.horizontalLayoutWidget)
-        self.spinBoxHours.setObjectName(u"spinBoxHours")
         font = QFont()
         font.setBold(True)
-        #font.setWeight(75)
+        self.spinBoxHours = QSpinBox(self.horizontalLayoutWidget)
+        self.spinBoxHours.setObjectName(u"spinBoxHours")
         self.spinBoxHours.setFont(font)
         self.spinBoxHours.setAlignment(Qt.AlignCenter)
 
@@ -82,7 +88,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayoutWidget_2 = QWidget(self.centralwidget)
         self.horizontalLayoutWidget_2.setObjectName(u"horizontalLayoutWidget_2")
-        self.horizontalLayoutWidget_2.setGeometry(QRect(175, 70, 311, 78))
+        self.horizontalLayoutWidget_2.setGeometry(QRect(175, 100, 311, 80))
         self.horizontalLayout_2 = QHBoxLayout(self.horizontalLayoutWidget_2)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setSizeConstraint(QLayout.SetFixedSize)
@@ -126,7 +132,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayoutWidget_2 = QWidget(self.centralwidget)
         self.verticalLayoutWidget_2.setObjectName(u"verticalLayoutWidget_2")
-        self.verticalLayoutWidget_2.setGeometry(QRect(9, 299, 521, 74))
+        self.verticalLayoutWidget_2.setGeometry(QRect(9, 270, 521, 74))
         self.verticalLayout_2 = QVBoxLayout(self.verticalLayoutWidget_2)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)

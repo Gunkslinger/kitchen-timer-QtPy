@@ -11,9 +11,8 @@ from pathlib import Path
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication, QMainWindow, QStyle
 from QtPyTimerUI2 import Ui_MainWindow, FinishDialog
-from chime import play_chime
 from kitchen_timer_config import KitchenTimerConfig
-
+from chime import play_chime
 
 
 class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
@@ -25,6 +24,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.h = 0
         self.m = 0
         self.s = 0
+        self.presetsToolButton.clicked.connect(self.openPresets)
         self.toolButtonStartStop.setCheckable(True)
         self.toolButtonStartStop.clicked.connect(self.start_stop)
         self.count_down_timer = QTimer(self)
@@ -36,8 +36,11 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.count_down_text: str
         self.appname: str
         self.now = dt.today()
-        self.labelDate.setText("Finish time: " +
-        f"{self.now.date()} {str(self.now.hour).zfill(2)}:{str(self.now.minute).zfill(2)}:{str(self.now.second).zfill(2)}")
+        print(self.now.strftime("%b %d %Y %I:%M:%S %p"))
+        self.labelDate.setText("Finish time: " + self.now.strftime("%b %d, %Y %I:%M:%S %p"))
+
+    def openPresets(self):
+        print("HELLO PRESETS")
 
     def set_app_name(self, name: str):
         '''set app name'''
@@ -50,6 +53,15 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.labelCountDown.setText(self.count_down_text)
         self.setWindowTitle(self.count_down_text)
         self.labelCountDown.repaint()
+        
+    def set_finish_label(self):
+        self.now = dt.today()
+        self.lhour = self.now.hour + self.h
+        self.lminute = self.now.minute + self.m
+        self.lsecond = self.now.second + self.s
+        self.finish_time = dt(self.now.date().year, self.now.date().month, self.now.date().day,
+                            self.lhour, self.lminute, self.lsecond)
+        self.labelDate.setText("Finish time: " + self.finish_time.strftime("%b %d, %Y %I:%M:%S %p"))
 
     def start_stop(self):
         ''' toggle start/stop button slot '''
@@ -63,6 +75,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.toolButtonStartStop.setStyleSheet(
                 "background-color: rgb(120, 45, 45)"  # red stop button
             )
+            self.set_finish_label()
             self.count_down_timer.start(1000)
         else:
             self.h = self.m = self.s = 0
@@ -94,10 +107,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
             self.toolButtonStartStop.setChecked(False)
             self.start_stop()
             # ALERT GOES HERE
-            play_chime()
             d = FinishDialog()
+            play_chime()
             d.exec()
-
 
 # class MainWindow
 

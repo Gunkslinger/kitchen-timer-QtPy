@@ -6,7 +6,7 @@ the python/Qt bindings module and Designer-qt5
 """
 
 import sys
-from datetime import datetime as dt
+import datetime as dt
 from pathlib import Path
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication, QMainWindow, QStyle
@@ -21,9 +21,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.h = 0
-        self.m = 0
-        self.s = 0
+        self.h = self.m = self.s = self.lsecond = self.lminute = self.lhour = 0
+        self.lday = 1
         self.presetsToolButton.clicked.connect(self.openPresets)
         self.toolButtonStartStop.setCheckable(True)
         self.toolButtonStartStop.clicked.connect(self.start_stop)
@@ -35,7 +34,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.progressBar.reset()
         self.count_down_text: str
         self.appname: str
-        self.now = dt.today()
+        self.now = dt.datetime.today()
         print(self.now.strftime("%b %d %Y %I:%M:%S %p"))
         self.labelDate.setText("Finish time: " + self.now.strftime("%b %d, %Y %I:%M:%S %p"))
 
@@ -53,15 +52,15 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.labelCountDown.setText(self.count_down_text)
         self.setWindowTitle(self.count_down_text)
         self.labelCountDown.repaint()
-        
+
+# Add timer amount to start time of day, handling
+# carry and set the label in the bottom of the Main Window        
     def set_finish_label(self):
-        self.now = dt.today()
-        self.lhour = self.now.hour + self.h
-        self.lminute = self.now.minute + self.m
-        self.lsecond = self.now.second + self.s
-        self.finish_time = dt(self.now.date().year, self.now.date().month, self.now.date().day,
-                            self.lhour, self.lminute, self.lsecond)
+        self.now = dt.datetime.today()
+        self.delt = dt.timedelta(hours=self.spinBoxHours.value(), minutes=self.spinBoxMinutes.value(),seconds=self.spinBoxSeconds.value())
+        self.finish_time = self.now + self.delt
         self.labelDate.setText("Finish time: " + self.finish_time.strftime("%b %d, %Y %I:%M:%S %p"))
+        print(self.finish_time.strftime("%b %d %Y %I:%M:%S %p"))
 
     def start_stop(self):
         ''' toggle start/stop button slot '''

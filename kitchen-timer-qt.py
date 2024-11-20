@@ -9,11 +9,11 @@ import sys
 import datetime as dt
 from pathlib import Path
 from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import QApplication, QMainWindow, QStyle
+from PySide6.QtWidgets import QApplication, QMainWindow, QStyle, QListWidget, QListWidgetItem
 from QtPyTimerUI2 import Ui_MainWindow, FinishDialog
 from kitchen_timer_config import KitchenTimerConfig
 from chime import play_chime
-
+from presets import Presets
 
 class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
     ''' MainWindow class '''
@@ -21,25 +21,53 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.h = self.m = self.s = self.lsecond = self.lminute = self.lhour = 0
-        self.lday = 1
+        self.h = self.m = self.s = 0
+
         self.presetsToolButton.clicked.connect(self.openPresets)
+        self.presetslistWidget = Presets()
+        self.presetslistWidget.listWidget.addItem("First Item 00:00:00")
+        self.presetslistWidget.listWidget.addItem("Second Item")
+        self.presetslistWidget.listWidget.addItem("Third Item")
+        self.presetslistWidget.listWidget.addItem("Fourth Item")
+        self.presetslistWidget.listWidget.addItem("Fifth Item")
+        self.presetslistWidget.hide()
+        self.spinBoxHours.valueChanged.connect(self.updatePresetHours)
+        self.spinBoxMinutes.valueChanged.connect(self.updatePresetMinutes)
+        self.spinBoxSeconds.valueChanged.connect(self.updatePresetSeconds)
         self.toolButtonStartStop.setCheckable(True)
         self.toolButtonStartStop.clicked.connect(self.start_stop)
+
         self.count_down_timer = QTimer(self)
         self.count_down_timer.timeout.connect(self.update_timer)
+
         self.spinBoxHours.clearFocus()
         self.spinBoxMinutes.clearFocus()
         self.spinBoxSeconds.clearFocus()
+
         self.progressBar.reset()
         self.count_down_text: str
         self.appname: str
         self.now = dt.datetime.today()
-        print(self.now.strftime("%b %d %Y %I:%M:%S %p"))
         self.labelDate.setText("Finish time: " + self.now.strftime("%b %d, %Y %I:%M:%S %p"))
 
+    def updatePresetHours(self):
+        self.presetslistWidget.cur_hours = self.spinBoxHours.value()
+
+    def updatePresetMinutes(self):
+        self.presetslistWidget.cur_minutes = self.spinBoxMinutes.value()
+
+    def updatePresetSeconds(self):
+        self.presetslistWidget.cur_seconds = self.spinBoxSeconds.value()
+
     def openPresets(self):
-        print("HELLO PRESETS")
+        self.presetslistWidget.show()
+        print("HELLO PRESETS:", self.presetslistWidget.listWidget.count(), "items")
+
+
+    def editpresets(self):
+        self.presetslistWidget.openPersistentEditor(self.presetslistWidget.currentItem())
+        self.presetslistWidget.closePersistentEditor(self.presetslistWidget.currentItem())
+
 
     def set_app_name(self, name: str):
         '''set app name'''

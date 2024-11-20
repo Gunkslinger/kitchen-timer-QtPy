@@ -15,7 +15,7 @@ from PySide6.QtCore import QMetaObject, QRect, Qt, QCoreApplication
 from PySide6.QtGui import QFont, QCursor
 from PySide6.QtWidgets import (QWidget, QLayout, QHBoxLayout, QVBoxLayout, QSpinBox, QToolBar,
                                 QAbstractSpinBox, QToolButton, QSizePolicy, QLabel, QProgressBar,
-                                QVBoxLayout, QDialog, QDialogButtonBox, QLabel)
+                                QListWidget, QDialog, QDialogButtonBox, QLabel)
 from datetime import datetime as dt
 
 class FinishDialog(QDialog):
@@ -48,6 +48,8 @@ class Ui_MainWindow(object):
         self.toolbar.setMovable(False)
         self.toolbar.setObjectName(u"toolBar")
         self.presetsToolButton = QToolButton(self.toolbar)
+        #self.presetslistWidget = QListWidget()
+
         self.toolbar.addWidget(self.presetsToolButton)
         self.presetsToolButton.setText(u"Presets")
         MainWindow.addToolBar(self.toolbar)
@@ -160,6 +162,7 @@ class Ui_MainWindow(object):
         self.progressBar.setStyleSheet(
                 "background-color: rgb(120, 45, 45)"
         )
+
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)

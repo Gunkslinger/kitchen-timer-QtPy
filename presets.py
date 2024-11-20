@@ -27,6 +27,7 @@ class Presets(QWidget):
 
     def newPresetButton(self):
         self.newDia = QWidget()
+        self.newDia.setWindowTitle("New Preset")
         self.newDia.resize(400, 200)
         self.newPresetMainLayout = QVBoxLayout()
         self.newDia.setLayout(self.newPresetMainLayout)
@@ -64,7 +65,7 @@ class Presets(QWidget):
         self.OkButton = QPushButton("Ok")
         self.cancelOkLayout.addWidget(self.cancelButton)
         self.cancelOkLayout.addWidget(self.OkButton)
-        
+
         # All of the buttons above need funcs to be connected to
         self.newPresetMainLayout.addLayout(self.cancelOkLayout)
         self.newDia.show()

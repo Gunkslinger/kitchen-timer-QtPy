@@ -3,8 +3,9 @@ from PySide6.QtWidgets import (QWidget, QListWidget, QLineEdit, QPushButton,
                                 QHBoxLayout, QVBoxLayout, QSpinBox)
 
 class Presets(QWidget):
-    def __init__(self):
+    def __init__(self, mw):
         super().__init__()
+        self.main_win = mw
         self.resize(240, 120)
         self.setWindowTitle("Presets")
         self.setLayout(QVBoxLayout())
@@ -13,7 +14,6 @@ class Presets(QWidget):
         self.newbutton = QPushButton("New")
         self.newbutton.clicked.connect(self.newPresetButton)
         self.editbutton = QPushButton("Edit")
-        #if self.listWidget.currentItem() is not None:
         self.editbutton.setEnabled(False)
         self.removebutton = QPushButton("Remove")
         self.butgrp = QHBoxLayout()
@@ -62,7 +62,10 @@ class Presets(QWidget):
 
         self.cancelOkLayout = QHBoxLayout()
         self.cancelButton = QPushButton("Cancel")
+        self.cancelButton.clicked.connect(lambda: self.newDia.close())
+        
         self.OkButton = QPushButton("Ok")
+        self.OkButton.clicked.connect(self.OkClicked)
         self.cancelOkLayout.addWidget(self.cancelButton)
         self.cancelOkLayout.addWidget(self.OkButton)
 
@@ -70,4 +73,11 @@ class Presets(QWidget):
         self.newPresetMainLayout.addLayout(self.cancelOkLayout)
         self.newDia.show()
 
+    def OkClicked(self):
+        self.listWidget.addItem(f"{self.nameText.text()} {self.spinh.value()}:{self.spinm.value()}:{self.spins.value()}")
+        # Set spinBoxes in main window
+        self.main_win.spinBoxHours.setValue(self.spinh.value())
+        self.main_win.spinBoxMinutes.setValue(self.spinm.value())
+        self.main_win.spinBoxSeconds.setValue(self.spins.value())
 
+        self.newDia.close()

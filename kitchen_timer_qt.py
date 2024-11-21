@@ -24,12 +24,11 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.h = self.m = self.s = 0
 
         self.presetsToolButton.clicked.connect(self.openPresets)
-        self.presetslistWidget = Presets()
+        self.presetslistWidget = Presets(self)
         self.presetslistWidget.listWidget.addItem("First Item 00:00:00")
-        self.presetslistWidget.listWidget.addItem("Second Item")
-        self.presetslistWidget.listWidget.addItem("Third Item")
-        self.presetslistWidget.listWidget.addItem("Fourth Item")
-        self.presetslistWidget.listWidget.addItem("Fifth Item")
+        self.presetslistWidget.listWidget.addItem("Second Item 00:00:00")
+        self.presetslistWidget.listWidget.addItem("Third Item 00:00:00")
+        self.presetslistWidget.listWidget.addItem("Fourth Item 00:00:00")
         self.presetslistWidget.hide()
         self.spinBoxHours.valueChanged.connect(self.updatePresetHours)
         self.spinBoxMinutes.valueChanged.connect(self.updatePresetMinutes)

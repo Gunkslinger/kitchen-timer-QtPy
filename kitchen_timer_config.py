@@ -23,3 +23,9 @@ class KitchenTimerConfig():
         '''
         qss = self.home + self.conf.qss
         return qss
+
+    def get_timer_presets(self) -> str:
+        ''' get the presets file path from the conf file
+        '''
+        presets = self.home + self.conf.presets
+        return presets

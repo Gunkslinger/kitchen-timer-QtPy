@@ -1,6 +1,7 @@
 from PySide6.QtCore import QRect, Qt
 from PySide6.QtWidgets import (QWidget, QListWidget, QLineEdit, QPushButton,
                                 QHBoxLayout, QVBoxLayout, QSpinBox)
+from kitchen_timer_config import KitchenTimerConfig
 
 class Presets(QWidget):
     def __init__(self, mw):
@@ -15,18 +16,27 @@ class Presets(QWidget):
         self.newbutton = QPushButton("New")
         self.newbutton.clicked.connect(self.newPresetButton)
         self.editbutton = QPushButton("Edit")
-        #self.editbutton.setEnabled(False)
         self.editbutton.clicked.connect(self.editPresetButton)
         self.removebutton = QPushButton("Remove")
         self.removebutton.clicked.connect(self.removePresetButton)
+        self.closebutton = QPushButton("Close")
+        self.closebutton.clicked.connect(self.closePresetButton)
         self.butgrp = QHBoxLayout()
         self.butgrp.addWidget(self.newbutton)
         self.butgrp.addWidget(self.editbutton)
         self.butgrp.addWidget(self.removebutton)
+        self.butgrp.addWidget(self.closebutton)
         self.layout().addLayout(self.butgrp)
         self.cur_hours = 0
         self.cur_minutes = 0
         self.cur_seconds = 0
+
+        self.kconf = KitchenTimerConfig()
+        self.presetsPath = self.kconf.get_timer_presets()
+        print(self.presetsPath)
+        with open(self.presetsPath, 'r') as prefile:
+            for line in prefile:
+                self.listWidget.addItem(line.rstrip())
 
     def doubleClick(self):
         self.curItem = self.listWidget.currentItem().text().split()
@@ -163,3 +173,10 @@ class Presets(QWidget):
         selectedItems = self.listWidget.selectedItems()
         for item in selectedItems:
                 self.listWidget.takeItem(self.listWidget.row(item))
+    
+    def closePresetButton(self):
+        with open(self.presetsPath, "w") as file:
+            file.truncate()
+            for i in range(self.listWidget.count()):
+                file.write(f"{self.listWidget.item(i).text()}\n")
+        self.close()

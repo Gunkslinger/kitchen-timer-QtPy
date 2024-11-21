@@ -10,12 +10,15 @@ class Presets(QWidget):
         self.setWindowTitle("Presets")
         self.setLayout(QVBoxLayout())
         self.listWidget = QListWidget(self)
+        self.listWidget.itemDoubleClicked.connect(self.doubleClick)
         self.layout().addWidget(self.listWidget)
         self.newbutton = QPushButton("New")
         self.newbutton.clicked.connect(self.newPresetButton)
         self.editbutton = QPushButton("Edit")
         self.editbutton.setEnabled(False)
+        self.editbutton.clicked.connect(self.editPresetButton)
         self.removebutton = QPushButton("Remove")
+        self.removebutton.clicked.connect(self.removePresetButton)
         self.butgrp = QHBoxLayout()
         self.butgrp.addWidget(self.newbutton)
         self.butgrp.addWidget(self.editbutton)
@@ -24,6 +27,14 @@ class Presets(QWidget):
         self.cur_hours = 0
         self.cur_minutes = 0
         self.cur_seconds = 0
+
+    def doubleClick(self):
+        self.curItem = self.listWidget.currentItem().text().split()
+        self.curTime= self.curItem[len(self.curItem) - 1].split(":")
+        self.main_win.spinBoxHours.setValue(int(self.curTime[0]))
+        self.main_win.spinBoxMinutes.setValue(int(self.curTime[1]))
+        self.main_win.spinBoxSeconds.setValue(int(self.curTime[2]))
+
 
     def newPresetButton(self):
         self.newDia = QWidget()
@@ -81,3 +92,12 @@ class Presets(QWidget):
         self.main_win.spinBoxSeconds.setValue(self.spins.value())
 
         self.newDia.close()
+
+    def editPresetButton(self):
+        print("edit button pressed")
+
+    def removePresetButton(self):
+        selectedItems = self.listWidget.selectedItems()
+        for item in selectedItems:
+                self.listWidget.takeItem(self.listWidget.row(item))
+        print("remove button pressed")

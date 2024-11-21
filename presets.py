@@ -15,7 +15,7 @@ class Presets(QWidget):
         self.newbutton = QPushButton("New")
         self.newbutton.clicked.connect(self.newPresetButton)
         self.editbutton = QPushButton("Edit")
-        self.editbutton.setEnabled(False)
+        #self.editbutton.setEnabled(False)
         self.editbutton.clicked.connect(self.editPresetButton)
         self.removebutton = QPushButton("Remove")
         self.removebutton.clicked.connect(self.removePresetButton)
@@ -76,15 +76,15 @@ class Presets(QWidget):
         self.cancelButton.clicked.connect(lambda: self.newDia.close())
         
         self.OkButton = QPushButton("Ok")
-        self.OkButton.clicked.connect(self.OkClicked)
+        self.OkButton.clicked.connect(self.newOkClicked)
+
         self.cancelOkLayout.addWidget(self.cancelButton)
         self.cancelOkLayout.addWidget(self.OkButton)
 
-        # All of the buttons above need funcs to be connected to
         self.newPresetMainLayout.addLayout(self.cancelOkLayout)
         self.newDia.show()
 
-    def OkClicked(self):
+    def newOkClicked(self):
         self.listWidget.addItem(f"{self.nameText.text()} {self.spinh.value()}:{self.spinm.value()}:{self.spins.value()}")
         # Set spinBoxes in main window
         self.main_win.spinBoxHours.setValue(self.spinh.value())
@@ -94,10 +94,72 @@ class Presets(QWidget):
         self.newDia.close()
 
     def editPresetButton(self):
-        print("edit button pressed")
+        self.editDia = QWidget()
+        self.editDia.setWindowTitle(f"Edit Preset: {self.listWidget.currentItem().text()}")
+        self.editDia.resize(500, 200)
+        self.editPresetMainLayout = QVBoxLayout()
+        self.editDia.setLayout(self.editPresetMainLayout)
+
+        self.curItem = self.listWidget.currentItem().text().split()
+        self.curTime= self.curItem[len(self.curItem) - 1].split(":")
+
+        self.editNameText = ""
+        for text in self.listWidget.currentItem().text():
+            for ch in text:
+                if ch.isdigit() is False:
+                    if ch == ":": break
+                    self.editNameText += ch
+                else: break
+        self.nameLineEdit = QLineEdit(self.editNameText.rstrip())
+
+        self.editSpinButLayout = QHBoxLayout()
+        self.editPresetMainLayout.addWidget(self.nameLineEdit)
+
+        self.spinh = QSpinBox()
+        self.spinh.setRange(0, 23)
+        self.spinh.setAlignment(Qt.AlignCenter)
+        self.spinh.setSuffix(" hours")
+        self.spinh.setValue(int(self.curTime[0]))
+        self.editSpinButLayout.addWidget(self.spinh)
+
+        self.spinm = QSpinBox()
+        self.spinm.setRange(0, 59)
+        self.spinm.setAlignment(Qt.AlignCenter)
+        self.spinm.setSuffix(" mins")
+        self.spinm.setValue(int(self.curTime[1]))
+        self.editSpinButLayout.addWidget(self.spinm)
+
+        self.spins = QSpinBox()
+        self.spins.setRange(0, 59)
+        self.spins.setAlignment(Qt.AlignCenter)
+        self.spins.setSuffix(" secs")
+        self.spins.setValue(int(self.curTime[2]))
+        self.editSpinButLayout.addWidget(self.spins)
+
+        self.editPresetMainLayout.addLayout(self.editSpinButLayout)
+
+        self.cancelOkLayout = QHBoxLayout()
+        self.cancelButton = QPushButton("Cancel")
+        self.cancelButton.clicked.connect(lambda: self.editDia.close())
+        
+        self.OkButton = QPushButton("Ok")
+        self.OkButton.clicked.connect(self.editOkClicked)
+
+        self.cancelOkLayout.addWidget(self.cancelButton)
+        self.cancelOkLayout.addWidget(self.OkButton)
+
+        self.editPresetMainLayout.addLayout(self.cancelOkLayout)
+        self.editDia.show()
+
+    def editOkClicked(self):
+        self.index = self.listWidget.row(self.listWidget.currentItem())
+        self.editItem = self.listWidget.takeItem(self.index)
+        self.listWidget.insertItem(self.index, f"{self.nameLineEdit.text()} {self.spinh.value()}:{self.spinm.value()}:{self.spins.value()}")
+
+        print(self.index)
+        self.editDia.close()
 
     def removePresetButton(self):
         selectedItems = self.listWidget.selectedItems()
         for item in selectedItems:
                 self.listWidget.takeItem(self.listWidget.row(item))
-        print("remove button pressed")

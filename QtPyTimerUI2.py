@@ -11,6 +11,8 @@
 # Converted to PySide6 and other tweaks done by hand
 # THIS FILE WILL NOT BE REGENERATED AS IS by it's UI file. DO NOT OVERWRITE! Necessary tweaks will be lost
 
+# This file is in the public domain -- author Gunkslinger@github.com 2024
+
 from PySide6.QtCore import QMetaObject, QRect, Qt, QCoreApplication
 from PySide6.QtGui import QFont, QCursor
 from PySide6.QtWidgets import (QWidget, QLayout, QHBoxLayout, QVBoxLayout, QSpinBox, QToolBar,
@@ -19,15 +21,20 @@ from PySide6.QtWidgets import (QWidget, QLayout, QHBoxLayout, QVBoxLayout, QSpin
 from datetime import datetime as dt
 
 class FinishDialog(QDialog):
-    def __init__(self):
+    def __init__(self, preset):
         super().__init__()
 
-        self.resize(240, 120)
-        self.setWindowTitle("Timer Finished")
+        self.resize(250, 120)
         self.setLayout(QVBoxLayout())
         finlab = QLabel()
         self.now = dt.today()
-        finlab.setText("Timer Finished at: " + self.now.strftime("%b %d, %Y %I:%M:%S %p"))
+        if len(preset):
+            self.preambleText = preset + " finished"
+        else:
+            self.preambleText = "Timer Finished"
+
+        finlab.setText(self.preambleText + " at: " + self.now.strftime("%b %d, %Y %I:%M:%S %p"))
+        self.setWindowTitle(self.preambleText)
         ok_button = QDialogButtonBox(QDialogButtonBox.Ok)
         ok_button.accepted.connect(self.accept)
 
@@ -41,14 +48,13 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        #MainWindow.resize(540, 408)
-        MainWindow.setFixedSize(540, 400)
+        #MainWindow.resize(580, 408)
+        MainWindow.setFixedSize(600, 400)
 
         self.toolbar = QToolBar(u"Tool Bar", MainWindow)
         self.toolbar.setMovable(False)
         self.toolbar.setObjectName(u"toolBar")
         self.presetsToolButton = QToolButton(self.toolbar)
-        #self.presetslistWidget = QListWidget()
 
         self.toolbar.addWidget(self.presetsToolButton)
         self.presetsToolButton.setText(u"Presets")
@@ -106,7 +112,6 @@ class Ui_MainWindow(object):
         font1.setFamily(u"Crillee")
         font1.setPointSize(35)
         font1.setBold(False)
-        #font1.setWeight(50)
         self.toolButtonStartStop.setFont(font1)
         self.toolButtonStartStop.setCursor(QCursor(Qt.PointingHandCursor))
         self.toolButtonStartStop.setToolButtonStyle(Qt.ToolButtonTextOnly)
@@ -124,7 +129,6 @@ class Ui_MainWindow(object):
         font2 = QFont()
         font2.setPointSize(35)
         font2.setBold(True)
-        #font2.setWeight(75)
         self.labelCountDown.setFont(font2)
         self.labelCountDown.setAutoFillBackground(False)
         self.labelCountDown.setTextFormat(Qt.AutoText)
@@ -134,7 +138,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayoutWidget_2 = QWidget(self.centralwidget)
         self.verticalLayoutWidget_2.setObjectName(u"verticalLayoutWidget_2")
-        self.verticalLayoutWidget_2.setGeometry(QRect(9, 270, 521, 74))
+        self.verticalLayoutWidget_2.setGeometry(QRect(10, 270, 560, 75))
         self.verticalLayout_2 = QVBoxLayout(self.verticalLayoutWidget_2)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -146,22 +150,6 @@ class Ui_MainWindow(object):
         self.labelDate.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_2.addWidget(self.labelDate)
-
-        self.verticalLayoutWidget_3 = QWidget(self.centralwidget)
-        self.verticalLayoutWidget_3.setObjectName(u"verticalLayoutWidget_3")
-        self.verticalLayoutWidget_3.setGeometry(QRect(10, 380, 519, 26))
-        self.verticalLayout_3 = QVBoxLayout(self.verticalLayoutWidget_3)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.progressBar = QProgressBar(self.verticalLayoutWidget_3)
-        self.progressBar.setObjectName(u"progressBar")
-        self.progressBar.setGeometry(QRect(10, 380, 517, 24))
-        self.progressBar.setMinimum(0)
-        self.progressBar.setMaximum(100)
-        #self.progressBar.setValue(24)
-        self.progressBar.setStyleSheet(
-                "background-color: rgb(120, 45, 45)"
-        )
 
         MainWindow.setCentralWidget(self.centralwidget)
 

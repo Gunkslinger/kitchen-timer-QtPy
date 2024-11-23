@@ -4,6 +4,7 @@
 Yet another Kitchen Timer prog, this time using PySide2,
 the python/Qt bindings module and Designer-qt5
 """
+# This file is in the public domain -- author Gunkslinger@github.com 2024
 
 import sys
 import datetime as dt
@@ -25,14 +26,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
 
         self.presetsToolButton.clicked.connect(self.openPresets)
         self.presetslistWidget = Presets(self)
-        # self.presetslistWidget.listWidget.addItem("First Item 1:0:0")
-        # self.presetslistWidget.listWidget.addItem("Second Item 2:0:0")
-        # self.presetslistWidget.listWidget.addItem("Third Item 3:0:0")
-        # self.presetslistWidget.listWidget.addItem("Fourth Item 4:0:0")
         self.presetslistWidget.hide()
-        self.spinBoxHours.valueChanged.connect(self.updatePresetHours)
-        self.spinBoxMinutes.valueChanged.connect(self.updatePresetMinutes)
-        self.spinBoxSeconds.valueChanged.connect(self.updatePresetSeconds)
+        self.presetName = ""
         self.toolButtonStartStop.setCheckable(True)
         self.toolButtonStartStop.clicked.connect(self.start_stop)
 
@@ -43,54 +38,40 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.spinBoxMinutes.clearFocus()
         self.spinBoxSeconds.clearFocus()
 
-        self.progressBar.reset()
         self.count_down_text: str
         self.appname: str
         self.now = dt.datetime.today()
         self.labelDate.setText("Finish time: " + self.now.strftime("%b %d, %Y %I:%M:%S %p"))
 
-    def updatePresetHours(self):
-        self.presetslistWidget.cur_hours = self.spinBoxHours.value()
-
-    def updatePresetMinutes(self):
-        self.presetslistWidget.cur_minutes = self.spinBoxMinutes.value()
-
-    def updatePresetSeconds(self):
-        self.presetslistWidget.cur_seconds = self.spinBoxSeconds.value()
 
     def openPresets(self):
         self.presetslistWidget.show()
-        print("HELLO PRESETS:", self.presetslistWidget.listWidget.count(), "items")
-
-
-    def editpresets(self):
-        self.presetslistWidget.openPersistentEditor(self.presetslistWidget.currentItem())
-        self.presetslistWidget.closePersistentEditor(self.presetslistWidget.currentItem())
-
 
     def set_app_name(self, name: str):
-        '''set app name'''
+        '''Set app name'''
         self.appname = name
         self.setWindowTitle(self.appname)
 
     def update_countdown_label(self):
-        ''' update countdown label '''
+        ''' Update countdown label '''
         self.count_down_text = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
         self.labelCountDown.setText(self.count_down_text)
         self.setWindowTitle(self.count_down_text)
         self.labelCountDown.repaint()
 
-# Add timer amount to start time of day, handling
-# carry and set the label in the bottom of the Main Window        
     def set_finish_label(self):
+        ''' Put finish label text together and display it '''
         self.now = dt.datetime.today()
         self.delt = dt.timedelta(hours=self.spinBoxHours.value(), minutes=self.spinBoxMinutes.value(),seconds=self.spinBoxSeconds.value())
         self.finish_time = self.now + self.delt
-        self.labelDate.setText("Finish time: " + self.finish_time.strftime("%b %d, %Y %I:%M:%S %p"))
-        print(self.finish_time.strftime("%b %d %Y %I:%M:%S %p"))
+        if len(self.presetName):
+            presetFinish = f"{self.presetName} finish time: "
+        else:
+            presetFinish = "Finish time: "
+        self.labelDate.setText(presetFinish + self.finish_time.strftime("%b %d, %Y %I:%M:%S %p"))
 
     def start_stop(self):
-        ''' toggle start/stop button slot '''
+        ''' Toggle start/stop button slot '''
         b = self.toolButtonStartStop.isChecked()
         if b is True:
             self.h = self.spinBoxHours.value()
@@ -132,8 +113,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         if self.h + self.m + self.s == 0:  # It's the fiiinal countdownnnn!!
             self.toolButtonStartStop.setChecked(False)
             self.start_stop()
-            # ALERT GOES HERE
-            d = FinishDialog()
+            d = FinishDialog(self.presetName)
             play_chime()
             d.exec()
 

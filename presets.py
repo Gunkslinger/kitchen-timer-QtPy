@@ -1,3 +1,5 @@
+# This file is in the public domain -- author Gunkslinger@github.com 2024
+
 from PySide6.QtCore import QRect, Qt
 from PySide6.QtWidgets import (QWidget, QListWidget, QLineEdit, QPushButton,
                                 QHBoxLayout, QVBoxLayout, QSpinBox)
@@ -21,32 +23,42 @@ class Presets(QWidget):
         self.removebutton.clicked.connect(self.removePresetButton)
         self.closebutton = QPushButton("Close")
         self.closebutton.clicked.connect(self.closePresetButton)
-        self.butgrp = QHBoxLayout()
-        self.butgrp.addWidget(self.newbutton)
-        self.butgrp.addWidget(self.editbutton)
-        self.butgrp.addWidget(self.removebutton)
-        self.butgrp.addWidget(self.closebutton)
-        self.layout().addLayout(self.butgrp)
-        self.cur_hours = 0
-        self.cur_minutes = 0
-        self.cur_seconds = 0
-
+        self.buttonLayout = QHBoxLayout()
+        self.buttonLayout.addWidget(self.newbutton)
+        self.buttonLayout.addWidget(self.editbutton)
+        self.buttonLayout.addWidget(self.removebutton)
+        self.buttonLayout.addWidget(self.closebutton)
+        self.layout().addLayout(self.buttonLayout)
+        self.dirty = False
         self.kconf = KitchenTimerConfig()
         self.presetsPath = self.kconf.get_timer_presets()
-        print(self.presetsPath)
         with open(self.presetsPath, 'r') as prefile:
             for line in prefile:
                 self.listWidget.addItem(line.rstrip())
+                
+    def getPresetName(self):
+        ''' Get the selected preset. This might be more efficiently done. I don't know yet. '''
+        presetNameText = ""
+        for text in self.listWidget.currentItem().text():
+            for ch in text:
+                if ch.isdigit() is False:
+                    if ch == ":": break
+                    presetNameText += ch
+                else: break
+        return presetNameText.rstrip()
 
     def doubleClick(self):
+        ''' Use the given preset '''
         self.curItem = self.listWidget.currentItem().text().split()
-        self.curTime= self.curItem[len(self.curItem) - 1].split(":")
+        self.curTime = self.curItem[len(self.curItem) - 1].split(":")
         self.main_win.spinBoxHours.setValue(int(self.curTime[0]))
         self.main_win.spinBoxMinutes.setValue(int(self.curTime[1]))
         self.main_win.spinBoxSeconds.setValue(int(self.curTime[2]))
-
+        self.main_win.presetName = self.getPresetName()
+        self.main_win.set_finish_label()
 
     def newPresetButton(self):
+        ''' Create a new preset '''
         self.newDia = QWidget()
         self.newDia.setWindowTitle("New Preset")
         self.newDia.resize(400, 200)
@@ -62,21 +74,21 @@ class Presets(QWidget):
         self.spinh.setRange(0, 23)
         self.spinh.setAlignment(Qt.AlignCenter)
         self.spinh.setSuffix(" hours")
-        self.spinh.setValue(self.cur_hours)
+        self.spinh.setValue(self.main_win.spinBoxHours.value())
         self.newSpinButLayout.addWidget(self.spinh)
 
         self.spinm = QSpinBox()
         self.spinm.setRange(0, 59)
         self.spinm.setAlignment(Qt.AlignCenter)
         self.spinm.setSuffix(" mins")
-        self.spinm.setValue(self.cur_minutes)
+        self.spinm.setValue(self.main_win.spinBoxMinutes.value())
         self.newSpinButLayout.addWidget(self.spinm)
 
         self.spins = QSpinBox()
         self.spins.setRange(0, 59)
         self.spins.setAlignment(Qt.AlignCenter)
         self.spins.setSuffix(" secs")
-        self.spins.setValue(self.cur_seconds)
+        self.spins.setValue(self.main_win.spinBoxSeconds.value())
         self.newSpinButLayout.addWidget(self.spins)
 
         self.newPresetMainLayout.addLayout(self.newSpinButLayout)
@@ -95,15 +107,17 @@ class Presets(QWidget):
         self.newDia.show()
 
     def newOkClicked(self):
+        ''' Save the newly created preset '''
+        self.dirty = True
         self.listWidget.addItem(f"{self.nameText.text()} {self.spinh.value()}:{self.spinm.value()}:{self.spins.value()}")
         # Set spinBoxes in main window
         self.main_win.spinBoxHours.setValue(self.spinh.value())
         self.main_win.spinBoxMinutes.setValue(self.spinm.value())
         self.main_win.spinBoxSeconds.setValue(self.spins.value())
-
         self.newDia.close()
 
     def editPresetButton(self):
+        ''' Edit the currently selected preset '''
         self.editDia = QWidget()
         self.editDia.setWindowTitle(f"Edit Preset: {self.listWidget.currentItem().text()}")
         self.editDia.resize(500, 200)
@@ -111,16 +125,10 @@ class Presets(QWidget):
         self.editDia.setLayout(self.editPresetMainLayout)
 
         self.curItem = self.listWidget.currentItem().text().split()
-        self.curTime= self.curItem[len(self.curItem) - 1].split(":")
+        self.curTime = self.curItem[len(self.curItem) - 1].split(":")
 
-        self.editNameText = ""
-        for text in self.listWidget.currentItem().text():
-            for ch in text:
-                if ch.isdigit() is False:
-                    if ch == ":": break
-                    self.editNameText += ch
-                else: break
-        self.nameLineEdit = QLineEdit(self.editNameText.rstrip())
+        self.editNameText = self.getPresetName()
+        self.nameLineEdit = QLineEdit(self.getPresetName())
 
         self.editSpinButLayout = QHBoxLayout()
         self.editPresetMainLayout.addWidget(self.nameLineEdit)
@@ -162,6 +170,8 @@ class Presets(QWidget):
         self.editDia.show()
 
     def editOkClicked(self):
+        ''' Insert the edited preset becak into the list and mark the list be saved '''
+        self.dirty = True
         self.index = self.listWidget.row(self.listWidget.currentItem())
         self.editItem = self.listWidget.takeItem(self.index)
         self.listWidget.insertItem(self.index, f"{self.nameLineEdit.text()} {self.spinh.value()}:{self.spinm.value()}:{self.spins.value()}")
@@ -170,13 +180,20 @@ class Presets(QWidget):
         self.editDia.close()
 
     def removePresetButton(self):
+        ''' The Remove preset button slot '''
+        self.dirty = True
         selectedItems = self.listWidget.selectedItems()
         for item in selectedItems:
                 self.listWidget.takeItem(self.listWidget.row(item))
     
     def closePresetButton(self):
-        with open(self.presetsPath, "w") as file:
-            file.truncate()
-            for i in range(self.listWidget.count()):
-                file.write(f"{self.listWidget.item(i).text()}\n")
+        ''' The Close button slot '''
+        if self.dirty == True:
+            with open(self.presetsPath, "w") as file:
+                print("truncating and writing" + self.presetsPath)
+                file.truncate()
+                for i in range(self.listWidget.count()):
+                    file.write(f"{self.listWidget.item(i).text()}\n")
+    
+        self.dirty = False
         self.close()

@@ -1,5 +1,8 @@
 ''' custom style confuguration code
 '''
+
+# This file is in the public domain -- author Gunkslinger@github.com 2024
+
 from pathlib import Path
 from config import config_from_json
 

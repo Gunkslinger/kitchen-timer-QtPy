@@ -1,4 +1,5 @@
 {
-    "file": "/chime.wav"
-    "qss": "/QtPyTimer.qss"
+	"file": ".local/share/QtTimer/chime.wav",
+	"qss": "Python-projects/kitchen-timer-QtPy/QtPyTimer.qss",
+	"presets": ".local/share/QtTimer/presets.txt"
 }

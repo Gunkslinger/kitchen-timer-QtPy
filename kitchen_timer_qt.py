@@ -8,6 +8,7 @@ the python/Qt bindings module and Designer-qt5
 
 import sys
 import datetime as dt
+import threading
 from pathlib import Path
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication, QMainWindow, QStyle, QListWidget, QListWidgetItem
@@ -113,8 +114,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         if self.h + self.m + self.s == 0:  # It's the fiiinal countdownnnn!!
             self.toolButtonStartStop.setChecked(False)
             self.start_stop()
+            thread = threading.Thread(target=play_chime)
+            thread.start()
             d = FinishDialog(self.presetName)
-            play_chime()
             d.exec()
 
 # class MainWindow

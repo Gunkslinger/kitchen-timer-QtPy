@@ -9,7 +9,6 @@ class Presets(QWidget):
     def __init__(self, mw):
         super().__init__()
         self.main_win = mw
-        self.resize(240, 120)
         self.setWindowTitle("Presets")
         self.setLayout(QVBoxLayout())
         self.listWidget = QListWidget(self)
@@ -35,6 +34,8 @@ class Presets(QWidget):
         with open(self.presetsPath, 'r') as prefile:
             for line in prefile:
                 self.listWidget.addItem(line.rstrip())
+        self.resize(240, 40 * self.listWidget.count())
+        print (self.listWidget.count())
                 
     def getPresetName(self):
         ''' Get the selected preset. This might be more efficiently done. I don't know yet. '''
@@ -66,6 +67,7 @@ class Presets(QWidget):
         self.newDia.setLayout(self.newPresetMainLayout)
 
         self.nameText = QLineEdit("name")
+        self.nameText.setSelection(0, 4)
 
         self.newSpinButLayout = QHBoxLayout()
         self.newPresetMainLayout.addWidget(self.nameText)
@@ -114,6 +116,9 @@ class Presets(QWidget):
         self.main_win.spinBoxHours.setValue(self.spinh.value())
         self.main_win.spinBoxMinutes.setValue(self.spinm.value())
         self.main_win.spinBoxSeconds.setValue(self.spins.value())
+
+        #self.resize(240, 40 * self.listWidget.count())
+
         self.newDia.close()
 
     def editPresetButton(self):
@@ -176,7 +181,6 @@ class Presets(QWidget):
         self.editItem = self.listWidget.takeItem(self.index)
         self.listWidget.insertItem(self.index, f"{self.nameLineEdit.text()} {self.spinh.value()}:{self.spinm.value()}:{self.spins.value()}")
 
-        print(self.index)
         self.editDia.close()
 
     def removePresetButton(self):
@@ -185,6 +189,8 @@ class Presets(QWidget):
         selectedItems = self.listWidget.selectedItems()
         for item in selectedItems:
                 self.listWidget.takeItem(self.listWidget.row(item))
+        #self.resize(240, 40 * self.listWidget.count())
+
     
     def closePresetButton(self):
         ''' The Close button slot '''

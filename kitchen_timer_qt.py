@@ -114,8 +114,9 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         if self.h + self.m + self.s == 0:  # It's the fiiinal countdownnnn!!
             self.toolButtonStartStop.setChecked(False)
             self.start_stop()
-            thread = threading.Thread(target=play_chime)
-            thread.start()
+            # Multi-thread finish notification dialog and chime
+            self.thread = threading.Thread(target=play_chime)
+            self.thread.start()
             d = FinishDialog(self.presetName)
             d.exec()
 

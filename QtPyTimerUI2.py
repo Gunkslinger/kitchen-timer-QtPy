@@ -20,16 +20,17 @@ from PySide6.QtWidgets import (QWidget, QLayout, QHBoxLayout, QVBoxLayout, QSpin
                                 QListWidget, QDialog, QDialogButtonBox, QLabel)
 from datetime import datetime as dt
 
+
 class FinishDialog(QDialog):
-    def __init__(self, preset):
+    def __init__(self, presetName):
         super().__init__()
 
         self.resize(250, 120)
         self.setLayout(QVBoxLayout())
         finlab = QLabel()
         self.now = dt.today()
-        if len(preset):
-            self.preambleText = preset + " finished"
+        if len(presetName):
+            self.preambleText = presetName + " finished"
         else:
             self.preambleText = "Timer Finished"
 

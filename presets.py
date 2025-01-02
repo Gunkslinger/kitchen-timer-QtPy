@@ -117,7 +117,7 @@ class Presets(QWidget):
         self.main_win.spinBoxMinutes.setValue(self.spinm.value())
         self.main_win.spinBoxSeconds.setValue(self.spins.value())
 
-        #self.resize(240, 40 * self.listWidget.count())
+        #TODO here? Restart timer if running? Either that or don't change main_win spinbox values (above). Not sure.
 
         self.newDia.close()
 
@@ -175,7 +175,7 @@ class Presets(QWidget):
         self.editDia.show()
 
     def editOkClicked(self):
-        ''' Insert the edited preset becak into the list and mark the list be saved '''
+        ''' Insert the edited preset back into the list and mark the list be saved '''
         self.dirty = True
         self.index = self.listWidget.row(self.listWidget.currentItem())
         self.editItem = self.listWidget.takeItem(self.index)

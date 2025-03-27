@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-
+#!/bin/env python
 """
 Yet another Kitchen Timer prog, this time using PySide2,
 the python/Qt bindings module and Designer-qt5

@@ -39,8 +39,8 @@ class Presets(QWidget):
         print (self.listWidget.count())
                 
     def getPresetName(self):
-        ''' Get the selected preset. This might be more efficiently done. I don't know yet. '''
-        return re.split("    ", self.listWidget.currentItem().text())[0]
+        ''' Get the selected preset. Use re to split on 4 spaces and return 1st in list. '''
+        return re.split(r"    ", self.listWidget.currentItem().text())[0]
 
     def doubleClick(self):
         ''' Use the given preset '''

@@ -1,6 +1,6 @@
 # This file is in the public domain -- author Gunkslinger@github.com 2024
 
-import re
+#import re
 from PySide6.QtCore import QRect, Qt
 from PySide6.QtWidgets import (QWidget, QListWidget, QLineEdit, QPushButton,
                                 QHBoxLayout, QVBoxLayout, QSpinBox)
@@ -39,13 +39,17 @@ class Presets(QWidget):
         print (self.listWidget.count())
                 
     def getPresetName(self):
-        ''' Get the selected preset. Use re to split on 4 spaces and return 1st in list. '''
-        return re.split(r"    ", self.listWidget.currentItem().text())[0]
+        ''' Get the selected preset. split on 4 spaces and return 1st in list. '''
+        #return re.split(r"    ", self.listWidget.currentItem().text())[0]
+        return self.listWidget.currentItem().text().split(r"    ")[0]
 
     def doubleClick(self):
         ''' Use the given preset '''
-        self.curItem = self.listWidget.currentItem().text().split()
-        self.curTime = self.curItem[len(self.curItem) - 1].split(":")
+        # self.curItem = self.listWidget.currentItem().text().split()
+        # self.curTime = self.curItem[len(self.curItem) - 1].split(":")
+        # UPDATED
+        self.curItem = self.listWidget.currentItem().text().split(r"    ")
+        self.curTime = self.curItem[1].split(':')
         self.main_win.spinBoxHours.setValue(int(self.curTime[0]))
         self.main_win.spinBoxMinutes.setValue(int(self.curTime[1]))
         self.main_win.spinBoxSeconds.setValue(int(self.curTime[2]))
@@ -123,8 +127,11 @@ class Presets(QWidget):
         self.editPresetMainLayout = QVBoxLayout()
         self.editDia.setLayout(self.editPresetMainLayout)
 
-        self.curItem = self.listWidget.currentItem().text().split()
-        self.curTime = self.curItem[len(self.curItem) - 1].split(":")
+        # self.curItem = self.listWidget.currentItem().text().split()
+        # self.curTime = self.curItem[len(self.curItem) - 1].split(":")
+        # UPDATED
+        self.curItem = self.listWidget.currentItem().text().split(r"    ")
+        self.curTime = self.curItem[1].split(':')
 
         self.editNameText = self.getPresetName()
         self.nameLineEdit = QLineEdit(self.getPresetName())

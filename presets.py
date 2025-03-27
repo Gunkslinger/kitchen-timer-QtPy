@@ -1,5 +1,6 @@
 # This file is in the public domain -- author Gunkslinger@github.com 2024
 
+import re
 from PySide6.QtCore import QRect, Qt
 from PySide6.QtWidgets import (QWidget, QListWidget, QLineEdit, QPushButton,
                                 QHBoxLayout, QVBoxLayout, QSpinBox)
@@ -39,14 +40,7 @@ class Presets(QWidget):
                 
     def getPresetName(self):
         ''' Get the selected preset. This might be more efficiently done. I don't know yet. '''
-        presetNameText = ""
-        for text in self.listWidget.currentItem().text():
-            for ch in text:
-                if ch.isdigit() is False:
-                    if ch == ":": break
-                    presetNameText += ch
-                else: break
-        return presetNameText.rstrip()
+        return re.split("    ", self.listWidget.currentItem().text())[0]
 
     def doubleClick(self):
         ''' Use the given preset '''
@@ -111,7 +105,7 @@ class Presets(QWidget):
     def newOkClicked(self):
         ''' Save the newly created preset '''
         self.dirty = True
-        self.listWidget.addItem(f"{self.nameText.text()} {self.spinh.value()}:{self.spinm.value()}:{self.spins.value()}")
+        self.listWidget.addItem(f"{self.nameText.text()}    {self.spinh.value()}:{self.spinm.value()}:{self.spins.value()}")
         # Set spinBoxes in main window
         self.main_win.spinBoxHours.setValue(self.spinh.value())
         self.main_win.spinBoxMinutes.setValue(self.spinm.value())
@@ -179,7 +173,7 @@ class Presets(QWidget):
         self.dirty = True
         self.index = self.listWidget.row(self.listWidget.currentItem())
         self.editItem = self.listWidget.takeItem(self.index)
-        self.listWidget.insertItem(self.index, f"{self.nameLineEdit.text()} {self.spinh.value()}:{self.spinm.value()}:{self.spins.value()}")
+        self.listWidget.insertItem(self.index, f"{self.nameLineEdit.text()}    {self.spinh.value()}:{self.spinm.value()}:{self.spins.value()}")
 
         self.editDia.close()
 

@@ -3,7 +3,28 @@
 Yet another Kitchen Timer prog, this time using PySide2,
 the python/Qt bindings module and Designer-qt5
 """
-# This file is in the public domain -- author Gunkslinger@github.com 2024
+#MIT License
+
+# Copyright (c) 2024 GunkSlinger
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 
 import sys
 import datetime as dt
@@ -31,8 +52,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.toolButtonStartStop.setCheckable(True)
         self.toolButtonStartStop.clicked.connect(self.start_stop)
 
-        self.count_down_timer = QTimer(self)
-        self.count_down_timer.timeout.connect(self.update_timer)
+        self.countDownTimer = QTimer(self)
+        self.countDownTimer.timeout.connect(self.update_timer)
 
         self.spinBoxHours.clearFocus()
         self.spinBoxMinutes.clearFocus()
@@ -45,6 +66,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
 
 
     def openPresets(self):
+        '''Open the main Presets Dailog'''
         self.presetslistWidget.show()
 
     def set_app_name(self, name: str):
@@ -65,15 +87,15 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         self.delt = dt.timedelta(hours=self.spinBoxHours.value(), minutes=self.spinBoxMinutes.value(),seconds=self.spinBoxSeconds.value())
         self.finish_time = self.now + self.delt
         if len(self.presetName):
-            presetFinish = f"{self.presetName} finish time: "
+            presetFinishName = f"{self.presetName} finish time: "
         else:
-            presetFinish = "Finish time: "
-        self.labelDate.setText(presetFinish + self.finish_time.strftime("%b %d, %Y %I:%M:%S %p"))
+            presetFinishName = "Finish time: "
+        self.labelDate.setText(presetFinishName + self.finish_time.strftime("%b %d, %Y %I:%M:%S %p"))
 
     def start_stop(self):
         ''' Toggle start/stop button slot '''
         b = self.toolButtonStartStop.isChecked()
-        if b is True:
+        if b is True: # start running
             self.h = self.spinBoxHours.value()
             self.m = self.spinBoxMinutes.value()
             self.s = self.spinBoxSeconds.value()
@@ -83,8 +105,8 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
                 "background-color: rgb(120, 45, 45)"  # red stop button
             )
             self.set_finish_label()
-            self.count_down_timer.start(1000)
-        else:
+            self.countDownTimer.start(1000)
+        else: # stop running
             self.h = self.m = self.s = 0
             self.update_countdown_label()
             self.toolButtonStartStop.setText("START".center(7))
@@ -92,7 +114,7 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
                 "background-color: "
             )  # blank resets to default color
             self.setWindowTitle(self.appname)
-            self.count_down_timer.stop()
+            self.countDownTimer.stop()
 
     def update_timer(self):
         ''' update timer slot '''

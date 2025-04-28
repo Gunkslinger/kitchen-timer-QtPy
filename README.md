@@ -3,7 +3,7 @@ Yet another kitchen timer app in python using PySide6 (Qt)
 This is another rewrite of an app I wrote years ago in C++.  
 This is an extended version from the original with editable presets.  
   
-All code that I have written in this repo I have placed in the public domain.  
+All code that I have written in this repo I have released undet the MIT license.  
 Do whatever you want with it, but remember that this was written as a learning  
 exercise for me, and may not be following best practices, nor may it be fit for purpose.  
 

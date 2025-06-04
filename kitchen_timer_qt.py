@@ -78,7 +78,11 @@ class MainWindow(QMainWindow, Ui_MainWindow, QTimer):
         ''' Update countdown label '''
         self.count_down_text = f"{self.h:0>2}:{self.m:0>2}:{self.s:0>2}"
         self.labelCountDown.setText(self.count_down_text)
-        self.setWindowTitle(self.count_down_text)
+        if len(self.presetName):
+            applabel = f"{self.presetName}: {self.count_down_text}"
+        else:
+            applabel = self.count_down_text
+        self.setWindowTitle(applabel)
         self.labelCountDown.repaint()
 
     def set_finish_label(self):

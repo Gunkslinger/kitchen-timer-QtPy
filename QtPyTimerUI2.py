@@ -1,16 +1,3 @@
-# -*- coding: utf-8 -*-
-
-################################################################################
-## Form generated from reading UI file 'QtPyTimer2.ui'
-##
-## Created by: Qt User Interface Compiler version 5.15.12
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
-
-# Converted to PySide6 and other tweaks done by hand
-# THIS FILE WILL NOT BE REGENERATED AS IS by it's UI file. DO NOT OVERWRITE! Necessary tweaks will be lost
-
 #MIT License
 
 # Copyright (c) 2024 GunkSlinger
@@ -187,5 +174,4 @@ class Ui_MainWindow(object):
         self.toolButtonStartStop.setText(QCoreApplication.translate("MainWindow", u"START", None))
         self.labelCountDown.setText(QCoreApplication.translate("MainWindow", u"00:00:00", None))
         self.labelDate.setText(QCoreApplication.translate("MainWindow", u"Today's Date + timer", None))
-    # retranslateUi
 

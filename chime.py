@@ -26,12 +26,27 @@ config file .QtTimer (JSON) in their home
 directory and plays it.
 """
 
-import wave
-import pyaudio
+import subprocess
+from subprocess import call
 from kitchen_timer_config import KitchenTimerConfig
 
 CHUNK = 1024
+OLDVOL = ""
 
+def getoldvol():
+    """
+    Get system volume level and save it for resetting after playing
+    """
+
+    process = subprocess.Popen(['amixer', 'get', 'Master'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    stdout, stderr = process.communicate()
+    OV = stdout[stdout.find("[")+1:stdout.find("]")-1]
+    global OLDVOL
+    OLDVOL = f"{OV}%"
+    print("OLDVOL: ", OLDVOL)
+
+def setvolume(vol):
+    call(['amixer', 'set', 'Master', "playback", vol])
 
 def play_chime():
     """
@@ -40,27 +55,12 @@ def play_chime():
     k = KitchenTimerConfig()
     kchime = k.get_chime_wav() # location
 
-    with wave.open(kchime, "rb") as wf:
-        # Instantiate PyAudio and initialize PortAudio system resources (1)
-        pa = pyaudio.PyAudio()
-
-        # Open stream (2)
-        stream = pa.open(
-            format=pa.get_format_from_width(wf.getsampwidth()),
-            channels=wf.getnchannels(),
-            rate=wf.getframerate(),
-            output=True,
-        )
-
-        # Play samples from the wave file (3)
-        while len(data := wf.readframes(CHUNK)):  # Requires Python 3.8+ for :=
-            stream.write(data)
-
-        # Close stream (4)
-        stream.close()
-
-        # Release PortAudio system resources (5)
-        pa.terminate()
+    getoldvol()
+    setvolume("45%")
+    call(['aplay', kchime])
+    global OLDVOL
+    setvolume(OLDVOL)
+    print("OLDVOL: ", OLDVOL)
 
 
 #play_chime() # for testing

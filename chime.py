@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2024 GunkSlinger
+# Copyright (c) 2025 GunkSlinger
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,14 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""From: PyAudio Example: Play a wave file.
-Gets audio file.wav to be played from user 
-config file .QtTimer (JSON) in their home
-directory and plays it.
-"""
 
 import subprocess
-from subprocess import call
 from kitchen_timer_config import KitchenTimerConfig
 
 CHUNK = 1024
@@ -46,7 +40,7 @@ def getoldvol():
     print("OLDVOL: ", OLDVOL)
 
 def setvolume(vol):
-    call(['amixer', 'set', 'Master', "playback", vol])
+    subprocess.call(['amixer', 'set', 'Master', "playback", vol])
 
 def play_chime():
     """
@@ -57,7 +51,7 @@ def play_chime():
 
     getoldvol()
     setvolume("45%")
-    call(['aplay', kchime])
+    subprocess.call(['aplay', kchime])
     global OLDVOL
     setvolume(OLDVOL)
     print("OLDVOL: ", OLDVOL)
